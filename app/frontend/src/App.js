@@ -14,6 +14,7 @@ function App() {
       <Route path="/matches" element={ <Games /> } />
       <Route path="/login" element={ <Login /> } />
       <Route exact path="/" element={ <Navigate to="/leaderboard" /> } />
+
     </Routes>
   );
 }
