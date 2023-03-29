@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import * as teamsController from '../database/controllers/teams.controller';
+import TeamsController from '../database/controllers/teams.controller';
 
+const teamsController = new TeamsController();
 const router = Router();
 
-router.get('/teams', teamsController.getAllTeams);
-router.get('/teams/:id', teamsController.getOneTeam);
+router.get('/teams', (req, res) => teamsController.getAllTeams(req, res));
+router.get('/teams/:id', (req, res) => teamsController.getOneTeam(req, res));
 
 export default router;

@@ -1,11 +1,18 @@
+import IReturnService from '../../interfaces';
 import Teams from '../models/TeamsModel';
 
-export async function getAllTeams() {
-  const data = await Teams.findAll();
-  return { status: 200, data };
-}
+export default class TeamsService {
+  constructor(private model = Teams) {
 
-export async function getOneTeam(id: string) {
-  const data = await Teams.findOne({ where: { id } });
-  return { status: 200, data };
+  }
+
+  async getAllTeams(): Promise<IReturnService> {
+    const data = await this.model.findAll();
+    return { status: 200, data };
+  }
+
+  async getOneTeam(id: string): Promise<IReturnService> {
+    const data = await this.model.findOne({ where: { id } });
+    return { status: 200, data };
+  }
 }
