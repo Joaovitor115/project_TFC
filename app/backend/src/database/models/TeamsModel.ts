@@ -7,19 +7,22 @@ class Teams extends Model {
   declare teamName: string;
 }
 
-Teams.init({
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+Teams.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    teamName: DataTypes.STRING(128),
   },
-  teamName: DataTypes.STRING(128),
-}, {
-  underscored: true,
-  sequelize: db,
-  modelName: 'Teams',
-  timestamps: false,
-});
+  {
+    underscored: true,
+    sequelize: db,
+    modelName: 'Teams',
+    timestamps: false,
+  },
+);
 
 /**
   * `Workaround` para aplicar as associations em TS:
