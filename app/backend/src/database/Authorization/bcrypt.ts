@@ -1,4 +1,4 @@
-import bcrypt = require('bcryptjs');
+import * as bcrypt from 'bcryptjs';
 
 export const verifyPassword = async (Password: string, hashedPassword:string) => {
   try {
