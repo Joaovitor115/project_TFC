@@ -12,7 +12,6 @@ export default class UsersController {
     if (message) {
       return res.status(status).json({ message });
     }
-    console.log(token, 'tokenzada');
     res.status(status).json({ token });
   }
 }

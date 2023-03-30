@@ -13,12 +13,12 @@ export default class UsersService {
     const { email, password } = data;
     const user: IUser | null = await this.model.findOne({ where: { email } });
     if (user === null) {
-      return { status: 400, message: 'All fields must be filled' };
+      return { status: 401, message: 'Invalid email or password' };
     }
     const isPasswordRight = await verifyPassword(password, user.password);
 
     if (isPasswordRight === false) {
-      return { status: 400, message: 'All fields must be filled' };
+      return { status: 401, message: 'Invalid email or password' };
     }
 
     const token = jwt.sign({ data }, secret, config);
