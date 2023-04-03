@@ -43,16 +43,36 @@ beforeEach( () => sinon.restore())
       expect(httpResponse.body).to.deep.equal(oneTeam)
     });
 
-    it('testing /login', async () => {
+    it('testing /login failing with no password', async () => {
 
-      sinon
-        .stub(Users, "findOne")
-         .resolves(
-           oneTeam as Teams);
-
-   const httpResponse = await chai.request(app).post('login')
-   expect(httpResponse.status).to.be.equal(200)
-   expect(httpResponse.body).to.deep.equal(oneTeam)
+   const response = await chai.request(app).post('/login').send({ email: 'zezin@zezin.com' })
+   expect(response.status).to.be.equal(400)
+   expect(response.body).to.deep.equal({ message: 'All fields must be filled'})
  });
+
+ it('testing /login failing with invalid email or password', async () => {
+
+  const response = await chai.request(app).post('/login').
+  send({ email: 'zezinzezin.com', password: 'sfasf'})
+  expect(response.status).to.be.equal(401)
+  expect(response.body).to.deep.equal({ message: 'Invalid email or password'})
+});
+it('t', async () => {
+  sinon
+      .stub(Users, "findOne")
+      .resolves({ 
+          username: 'Admin',
+          email: 'admin@admin.com',
+          role: 'admin',
+          password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW',
+          id: 1,
+      } as Users);
+  const response = await chai.request(app).post('/login').
+  send({  email: 'admin@admin.com', password: 'secret_admin'})
+  expect(response.status).to.be.equal(200)
+  expect(response.body).to.property('token')
+});
+
+ 
   });
 });
