@@ -9,6 +9,7 @@ export interface IUser {
   role: string
   id: number
   username: string
+  status?: number
 }
 
 export interface IToken {
@@ -21,3 +22,6 @@ export interface ILogin {
   email: string
   password: string
 }
+
+export type IEmail = Pick<IUser, 'email'>;
+export type IRole = Pick<IUser, 'role' | 'status'>;

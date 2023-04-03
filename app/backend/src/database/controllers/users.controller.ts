@@ -14,4 +14,10 @@ export default class UsersController {
     }
     res.status(status).json({ token });
   }
+
+  async getRole(_req: Request, res: Response) {
+    const { email } = res.locals.payload.data;
+    const { status, data } = await this.service.getRole({ email });
+    res.status(status).json(data);
+  }
 }
