@@ -68,3 +68,7 @@ export const oneTeam = {
   "id": 5,
 "teamName": "Cruzeiro"
 }
+export const mockPayload = {
+  email: "admin@admin.com",
+  password: "secret_admin"
+}

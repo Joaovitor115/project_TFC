@@ -4,12 +4,12 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 import { allTeams, oneTeam } from './mocks';
 import TeamsService from '../database/services/teams.service';
 import Teams from '../database/models/TeamsModel';
+import Users from '../database/models/UsersModel';
 
 chai.use(chaiHttp);
 
@@ -42,5 +42,17 @@ beforeEach( () => sinon.restore())
       expect(httpResponse.status).to.be.equal(200)
       expect(httpResponse.body).to.deep.equal(oneTeam)
     });
+
+    it('testing /login', async () => {
+
+      sinon
+        .stub(Users, "findOne")
+         .resolves(
+           oneTeam as Teams);
+
+   const httpResponse = await chai.request(app).post('login')
+   expect(httpResponse.status).to.be.equal(200)
+   expect(httpResponse.body).to.deep.equal(oneTeam)
+ });
   });
 });
