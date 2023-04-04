@@ -10,6 +10,8 @@ class Matches extends Model {
   declare awayTeamId: string;
   declare awayTeamGoals: string;
   declare inProgress: boolean;
+  declare homeTeam: object;
+  declare awayTeam: object;
 }
 
 Matches.init(
@@ -63,11 +65,11 @@ Matches.init(
   * `Workaround` para aplicar as associations em TS:
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
-Teams.belongsTo(Matches, { foreignKey: 'home_team_id' });
-Matches.hasMany(Teams, { foreignKey: 'home_team_id' });
+Matches.belongsTo(Teams, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+Teams.hasMany(Matches, { foreignKey: 'homeTeamId', as: 'homeTeam' });
 
-Teams.belongsTo(Matches, { foreignKey: 'away_team_id' });
-Matches.hasMany(Teams, { foreignKey: 'away_team_id' });
+Matches.belongsTo(Teams, { foreignKey: 'awayTeamId', as: 'awayTeam' });
+Teams.hasMany(Matches, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 // OtherModel.belongsTo(Example, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
 // OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
 
