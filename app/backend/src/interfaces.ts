@@ -23,5 +23,9 @@ export interface ILogin {
   password: string
 }
 
+export interface IQuery {
+  inProgress?: string;
+}
+
 export type IEmail = Pick<IUser, 'email'>;
 export type IRole = Pick<IUser, 'role' | 'status'>;

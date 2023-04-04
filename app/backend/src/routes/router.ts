@@ -13,6 +13,6 @@ router.get('/teams', (req, res) => teamsController.getAllTeams(req, res));
 router.get('/teams/:id', (req, res) => teamsController.getOneTeam(req, res));
 router.post('/login', loginMiddleware, (req, res) => usersController.login(req, res));
 router.get('/login/role', validateToken, (req, res) => usersController.getRole(req, res));
-router.get('/matches', (req, res) => matchesController.getAllTeams(req, res));
+router.get('/matches', (req, res) => matchesController.getFilteredMatches(req, res));
 
 export default router;

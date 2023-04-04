@@ -6,14 +6,8 @@ export default class TeamsController {
 
   }
 
-  async getAllTeams(_req: Request, res: Response) {
-    const { status, data } = await this.service.getAllMatches();
+  async getFilteredMatches(req: Request, res: Response) {
+    const { status, data } = await this.service.getFilteredMatches(req.query);
     res.status(status).json(data);
   }
-
-  // async getOneTeam(req: Request, res: Response) {
-  //   const { id } = req.params;
-  //   const { status, data } = await this.service.getOneTeam(id);
-  //   res.status(status).json(data);
-  // }
 }

@@ -1,4 +1,4 @@
-import IReturnService from '../../interfaces';
+import IReturnService, { IQuery } from '../../interfaces';
 import Matches from '../models/MatchesModel';
 import Teams from '../models/TeamsModel';
 
@@ -7,18 +7,30 @@ export default class TeamsService {
 
   }
 
-  async getAllMatches(): Promise<IReturnService> {
+  async getAllMatches() {
     const data = await this.model.findAll({
       include: [
         { model: Teams, as: 'homeTeam', attributes: ['teamName'] },
         { model: Teams, as: 'awayTeam', attributes: ['teamName'] },
       ],
     });
-    return { status: 200, data };
+    return data;
   }
 
-  async getOneMatch(id: string): Promise<IReturnService> {
-    const data = await this.model.findOne({ where: { id } });
+  async getFilteredMatches(query: IQuery): Promise<IReturnService> {
+    const { inProgress } = query;
+    if (!inProgress) {
+      const data = await this.getAllMatches();
+      return { status: 200, data };
+    }
+    const bol: boolean = JSON.parse(inProgress);
+    const data = await this.model.findAll({
+      include: [
+        { model: Teams, as: 'homeTeam', attributes: ['teamName'] },
+        { model: Teams, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+      where: { inProgress: bol },
+    });
     return { status: 200, data };
   }
 }
