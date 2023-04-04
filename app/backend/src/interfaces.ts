@@ -1,6 +1,7 @@
 export default interface IReturnService {
   status: number;
   data?: object[] | object | null
+  message?: string
 }
 
 export interface IUser {
@@ -25,6 +26,10 @@ export interface ILogin {
 
 export interface IQuery {
   inProgress?: string;
+}
+
+export interface IID {
+  id: string
 }
 
 export type IEmail = Pick<IUser, 'email'>;

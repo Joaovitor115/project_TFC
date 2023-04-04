@@ -10,4 +10,10 @@ export default class TeamsController {
     const { status, data } = await this.service.getFilteredMatches(req.query);
     res.status(status).json(data);
   }
+
+  async patchMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { status, message } = await this.service.patchMatch({ id });
+    res.status(status).json({ message });
+  }
 }

@@ -1,4 +1,4 @@
-import IReturnService, { IQuery } from '../../interfaces';
+import IReturnService, { IID, IQuery } from '../../interfaces';
 import Matches from '../models/MatchesModel';
 import Teams from '../models/TeamsModel';
 
@@ -32,5 +32,16 @@ export default class TeamsService {
       where: { inProgress: bol },
     });
     return { status: 200, data };
+  }
+
+  async patchMatch(params: IID): Promise<IReturnService> {
+    const { id } = params;
+    const match = await this.model.findByPk(id);
+    if (match) {
+      await match.update({
+        inProgress: false,
+      });
+    }
+    return { status: 200, message: 'Finished' };
   }
 }
