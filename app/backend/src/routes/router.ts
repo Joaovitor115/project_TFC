@@ -2,7 +2,8 @@ import { Router } from 'express';
 import UsersController from '../database/controllers/users.controller';
 import TeamsController from '../database/controllers/teams.controller';
 import MatchesController from '../database/controllers/matches.controller';
-import loginMiddleware, { validateToken } from '../database/Middlewares/loginMiddleware';
+import loginMiddleware, { validateMatch,
+  validateToken } from '../database/Middlewares/loginMiddleware';
 
 const teamsController = new TeamsController();
 const usersController = new UsersController();
@@ -27,6 +28,7 @@ router.patch(
 router.post(
   '/matches',
   validateToken,
+  validateMatch,
   (req, res) => matchesController.createNewMatch(req, res),
 );
 

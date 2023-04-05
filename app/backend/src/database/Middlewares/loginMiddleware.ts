@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { secret } from '../Authorization/jwtconfig';
+import Teams from '../models/TeamsModel';
 
 export default function loginMiddleware(req: Request, res: Response, next: NextFunction) {
   const { email, password } = req.body;
@@ -28,4 +29,18 @@ export function validateToken(req: Request, res: Response, next: NextFunction) {
     res.locals.payload = decoded;
     next();
   });
+}
+export async function validateMatch(req: Request, res: Response, next: NextFunction) {
+  const { homeTeamId, awayTeamId } = req.body;
+  if (homeTeamId === awayTeamId) {
+    return res.status(422).json(
+      { message: 'It is not possible to create a match with two equal teams' },
+    );
+  }
+  const home = await Teams.findByPk(homeTeamId);
+  const away = await Teams.findByPk(awayTeamId);
+  if (!home || !away) {
+    return res.status(404).json({ message: 'There is no team with such id!' });
+  }
+  next();
 }
