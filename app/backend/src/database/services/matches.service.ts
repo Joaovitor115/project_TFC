@@ -38,9 +38,9 @@ export default class MatchesS {
     const { id } = params;
     const match = await this.model.findByPk(id);
     if (match) {
-      await match.update({
+      await this.model.update({
         inProgress: false,
-      });
+      }, { where: { id } });
     }
     return { status: 200, message: 'Finished' };
   }
@@ -49,10 +49,10 @@ export default class MatchesS {
     const { id, homeTeamGoals, awayTeamGoals } = params;
     const match = await this.model.findByPk(id);
     if (match) {
-      await match.update({
+      await this.model.update({
         homeTeamGoals,
         awayTeamGoals,
-      });
+      }, { where: { id } });
     }
     return { status: 200, message: 'Goals updated with success' };
   }
@@ -63,4 +63,25 @@ export default class MatchesS {
     });
     return { status: 201, data };
   }
+
+//   async getLeaderBoard(): Promise<IReturnService> {
+//     const matches = await this.getAllMatches;
+//     const teams = await Teams.findAll();
+//     const data: [] = [];
+//     teams.map((team) => data.push(
+//       {
+//         name: team.teamName,
+//         totalPoints: matches.filter((match) =>  ),
+//         totalGames: 5,
+//         totalVictories: 4,
+//         totalDraws: 1,
+//         totalLosses: 0,
+//         goalsFavor: 17,
+//         goalsOwn: 5,
+//         goalsBalance: 12,
+//         efficiency: 86.67,
+//       },
+//     ));
+//     return { status: 201, data };
+//   }
 }

@@ -109,7 +109,7 @@ it('validate that it return all matches that are not currently in progress', asy
   expect(response.body).to.deep.equal(allMatchesFalse)
 });
 
-it.only('validate that it can finish a match', async () => {
+it('validate that it can finish a match', async () => {
   sinon.stub(Matches, 'update').resolves()
   sinon.stub(Matches, 'findByPk').resolves(insertedMatch as unknown as Matches)
 
@@ -122,23 +122,26 @@ it.only('validate that it can finish a match', async () => {
 });
 
 it('validate that it can update a match', async () => {
-  sinon.stub(Matches, "update").resolves()
+  sinon.stub(Matches, 'update').resolves()
+  sinon.stub(Matches, 'findByPk').resolves(insertedMatch as unknown as Matches)
   const response = await chai.request(app).patch('/matches/41').send({
     "homeTeamGoals": 3,
     "awayTeamGoals": 1
-  })
+  }).set('Authorization', token)
   expect(response.status).to.be.equal(200)
   expect(response.body).to.deep.equal({message: "Goals updated with success"})
 });
 
 it('validate that it can create a match', async () => {
+  const payload = {email: 'admin@admin.com'}
+  sinon.stub(jwt, 'verify').callsFake(() => payload)
   sinon.stub(Matches, "create").resolves(insertedMatch as unknown as Matches);
-  const response = await chai.request(app).patch('/matches').send({
+  const response = await chai.request(app).post('/matches').send({
     "homeTeamId": 16,
     "awayTeamId": 8, 
     "homeTeamGoals": 2,
     "awayTeamGoals": 2
-  })
+  }).set('Authorization', 'token')
   expect(response.status).to.be.equal(201)
   expect(response.body).to.deep.equal(insertedMatch)
 });
