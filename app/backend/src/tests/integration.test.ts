@@ -80,10 +80,14 @@ it('validate that it returns a token', async () => {
 });
 
 it('validate that it returns the role of the current user', async () => {
-  const payload = {email: 'admin@admin.com'}
+  const payload = {data: {email: 'admin@admin.com'}}
   sinon.stub(jwt, 'verify').callsFake(() => payload)
+  console.log(payload);
+  
   sinon.stub(Users, "findOne").resolves(userAdmin as Users);
-  const response = await chai.request(app).get('/login/role').set('Authorization', 'meu_token')
+  const response = await chai.request(app).get('/login/role').set('Authorization', token)
+  console.log(response);
+  
   expect(response.status).to.be.equal(200)
   expect(response.body).to.deep.equal({ role: "admin" })
 });

@@ -24,11 +24,14 @@ export default class UsersController {
     }
     try {
       const payload = jwt.verify(token, secret);
-      const { email } = payload as jwt.JwtPayload;
+      const { email } = (payload as jwt.JwtPayload).data;
+      console.log(payload);
+      console.log(email);
+
       const { status, data } = await this.service.getRole({ email });
       res.status(status).json(data);
     } catch (error) {
-      return res.status(402).send({ message: 'Token must be a valid token' });
+      return res.status(401).send({ message: 'Token must be a valid token' });
     }
   }
 }
