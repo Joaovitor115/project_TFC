@@ -16,4 +16,15 @@ export default class TeamsController {
     const { status, message } = await this.service.patchMatch({ id });
     res.status(status).json({ message });
   }
+
+  async updateMatchGoals(req: Request, res: Response) {
+    const { id } = req.params;
+    const { status, message } = await this.service.updateMatchGoals({ id, ...req.body });
+    res.status(status).json({ message });
+  }
+
+  async createNewMatch(req: Request, res: Response) {
+    const { status, data } = await this.service.createNewMatch({ ...req.body });
+    res.status(status).json(data);
+  }
 }

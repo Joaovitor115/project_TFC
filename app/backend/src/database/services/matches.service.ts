@@ -1,4 +1,4 @@
-import IReturnService, { IID, IQuery } from '../../interfaces';
+import IReturnService, { IID, IMatch, IQuery } from '../../interfaces';
 import Matches from '../models/MatchesModel';
 import Teams from '../models/TeamsModel';
 
@@ -43,5 +43,24 @@ export default class TeamsService {
       });
     }
     return { status: 200, message: 'Finished' };
+  }
+
+  async updateMatchGoals(params: IID): Promise<IReturnService> {
+    const { id, homeTeamGoals, awayTeamGoals } = params;
+    const match = await this.model.findByPk(id);
+    if (match) {
+      await match.update({
+        homeTeamGoals,
+        awayTeamGoals,
+      });
+    }
+    return { status: 200, message: 'Goals updated with success' };
+  }
+
+  async createNewMatch(match: IMatch): Promise<IReturnService> {
+    const data = await this.model.create({
+      ...match,
+    });
+    return { status: 201, data };
   }
 }

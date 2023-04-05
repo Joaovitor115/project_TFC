@@ -30,6 +30,15 @@ export interface IQuery {
 
 export interface IID {
   id: string
+  homeTeamGoals?: number
+  awayTeamGoals?: number
+}
+
+export interface IMatch {
+  awayTeamGoals: number
+  awayTeamId: number
+  homeTeamGoals: number
+  homeTeamId: number
 }
 
 export type IEmail = Pick<IUser, 'email'>;
