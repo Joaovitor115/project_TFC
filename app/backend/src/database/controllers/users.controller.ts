@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 import UsersService from '../services/users.service';
+import { secret } from '../Authorization/jwtconfig';
 
 export default class UsersController {
   constructor(private service = new UsersService()) {
@@ -15,9 +17,18 @@ export default class UsersController {
     res.status(status).json({ token });
   }
 
-  async getRole(_req: Request, res: Response) {
-    const { email } = res.locals.payload.data;
-    const { status, data } = await this.service.getRole({ email });
-    res.status(status).json(data);
+  async getRole(req: Request, res: Response) {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).send({ message: 'Token not found' });
+    }
+    try {
+      const payload = jwt.verify(token, secret);
+      const { email } = payload as jwt.JwtPayload;
+      const { status, data } = await this.service.getRole({ email });
+      res.status(status).json(data);
+    } catch (error) {
+      return res.status(402).send({ message: 'Token must be a valid token' });
+    }
   }
 }

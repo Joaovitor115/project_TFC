@@ -15,21 +15,26 @@ export default function loginMiddleware(req: Request, res: Response, next: NextF
   }
   next();
 }
-export function validateToken(req: Request, res: Response, next: NextFunction) {
+export const validateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
-
   if (!token) {
     return res.status(401).send({ message: 'Token not found' });
   }
-
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: 'Token must be a valid token' });
-    }
-    res.locals.payload = decoded;
+  try {
+    const payload = jwt.verify(token, secret);
+    res.locals.payload = payload;
     next();
-  });
-}
+  } catch (error) {
+    return res.status(401).send({ message: 'Token must be a valid token' });
+  }
+  // jwt.verify(token, secret, (err, decoded) => {
+  //   if (err) {
+  //     return res.status(401).send({ message: 'Token must be a valid token' });
+  //   }
+  //   res.locals.payload = decoded;
+  //   next();
+  // });
+};
 export async function validateMatch(req: Request, res: Response, next: NextFunction) {
   const { homeTeamId, awayTeamId } = req.body;
   if (homeTeamId === awayTeamId) {

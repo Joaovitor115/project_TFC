@@ -2,7 +2,7 @@ import IReturnService, { IID, IMatch, IQuery } from '../../interfaces';
 import Matches from '../models/MatchesModel';
 import Teams from '../models/TeamsModel';
 
-export default class TeamsService {
+export default class MatchesS {
   constructor(private model = Matches) {
 
   }
