@@ -8,5 +8,5 @@ module.exports = {
     'src/database/seeders',
     'src/database/models'
   ],
-  include: ['src/**/*.ts']
+  include: ['src/**/**/*.ts']
 };

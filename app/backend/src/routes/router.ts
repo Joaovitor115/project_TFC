@@ -31,5 +31,10 @@ router.post(
   validateMatch,
   (req, res) => matchesController.createNewMatch(req, res),
 );
+router.get(
+  '/leaderboard/home',
+  validateToken,
+  (req, res) => MatchesController.getLeaderBoard(req, res),
+);
 
 export default router;

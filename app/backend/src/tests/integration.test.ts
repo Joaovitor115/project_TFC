@@ -5,13 +5,10 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import * as jwt from 'jsonwebtoken'
-import { Response } from 'superagent';
 import { allMatches, allMatchesFalse, allMatchesTrue, allTeams, insertedMatch, oneTeam, userAdmin } from './mocks';
-import TeamsService from '../database/services/teams.service';
 import Teams from '../database/models/TeamsModel';
 import Users from '../database/models/UsersModel';
 import Matches from '../database/models/MatchesModel';
-const axios = require('axios');
 
 
 
@@ -82,11 +79,10 @@ it('validate that it returns a token', async () => {
 it('validate that it returns the role of the current user', async () => {
   const payload = {data: {email: 'admin@admin.com'}}
   sinon.stub(jwt, 'verify').callsFake(() => payload)
-  console.log(payload);
+
   
   sinon.stub(Users, "findOne").resolves(userAdmin as Users);
   const response = await chai.request(app).get('/login/role').set('Authorization', token)
-  console.log(response);
   
   expect(response.status).to.be.equal(200)
   expect(response.body).to.deep.equal({ role: "admin" })
@@ -119,7 +115,6 @@ it('validate that it can finish a match', async () => {
 
   
   const response = await chai.request(app).patch('/matches/41/finish').send().set('Authorization', token)
-  console.log(response.body, 'BODYYYYY' );
   
   expect(response.status).to.be.equal(200)
   expect(response.body).to.deep.equal({ message: "Finished" })  
@@ -149,8 +144,6 @@ it('validate that it can create a match', async () => {
   expect(response.status).to.be.equal(201)
   expect(response.body).to.deep.equal(insertedMatch)
 });
-
-
  
   });
 });

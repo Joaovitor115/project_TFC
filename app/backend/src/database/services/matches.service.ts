@@ -84,8 +84,8 @@ export default class MatchesS {
   static async getGoals(id: number) {
     let goalsTaken = 0;
     let goalsMade = 0;
-    const homeTeams = await Matches.findAll({ where: { homeTeamId: id } });
-    const awayTeams = await Matches.findAll({ where: { awayTeamId: id } });
+    const homeTeams = await Matches.findAll({ where: { homeTeamId: id, inProgress: false } });
+    const awayTeams = await Matches.findAll({ where: { awayTeamId: id, inProgress: false } });
     homeTeams.forEach((element) => {
       goalsMade += JSON.parse(element.homeTeamGoals);
       goalsTaken += JSON.parse(element.awayTeamGoals);
@@ -102,8 +102,8 @@ export default class MatchesS {
     const time = await Teams.findByPk(id);
     const { teamName } = time as Teams;
     const { goalsMade, goalsTaken } = teamGoalsInfo;
-    const homeTeam = await Matches.findAll({ where: { homeTeamId: id } });
-    const awayTeam = await Matches.findAll({ where: { awayTeamId: id } });
+    const homeTeam = await Matches.findAll({ where: { homeTeamId: id, inProgress: false } });
+    const awayTeam = await Matches.findAll({ where: { awayTeamId: id, inProgress: false } });
     const teamResulsInfo = await MatchesS.getMatchResults(homeTeam, awayTeam);
     const { totalDraws, totalLosses, totalWins } = teamResulsInfo;
     const totalGoals = goalsMade - goalsTaken;
