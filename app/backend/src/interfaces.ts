@@ -35,10 +35,33 @@ export interface IID {
 }
 
 export interface IMatch {
-  awayTeamGoals: number
-  awayTeamId: number
-  homeTeamGoals: number
-  homeTeamId: number
+  awayTeamGoals: string
+  awayTeamId: string
+  homeTeamGoals: string
+  homeTeamId: string
+}
+export interface ILeaderBoard {
+  name: string
+  totalPoints: number
+  totalGames: number
+  totalVictories: number
+  totalDraws: number
+  totalLosses: number
+  goalsFavor: number
+  goalsOwn: number
+  goalsBalance: number
+  efficiency: number
+}
+
+export interface IGetPoints {
+  goalsMade: number
+  goalsTaken: number
+  totalDraws: number
+  totalGames: number
+  totalWins: number
+  totalGoals: number
+  totalLosses: number
+  teamName: string
 }
 
 export type IEmail = Pick<IUser, 'email'>;
