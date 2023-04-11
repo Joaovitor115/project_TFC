@@ -98,10 +98,8 @@ export default class MatchesS {
   }
 
   static async getPoints(id: number): Promise<IGetPoints> {
-    const teamGoalsInfo = await MatchesS.getGoals(id);
-    const time = await Teams.findByPk(id);
-    const { teamName } = time as Teams;
-    const { goalsMade, goalsTaken } = teamGoalsInfo;
+    const { goalsMade, goalsTaken } = await MatchesS.getGoals(id);
+    const { teamName } = await Teams.findByPk(id) as Teams;
     const homeTeam = await Matches.findAll({ where: { homeTeamId: id, inProgress: false } });
     const awayTeam = await Matches.findAll({ where: { awayTeamId: id, inProgress: false } });
     const teamResulsInfo = await MatchesS.getMatchResults(homeTeam, awayTeam);
@@ -122,10 +120,18 @@ export default class MatchesS {
     return Promise.all(teams.map((element) => MatchesS.getPoints(element.id)));
   }
 
+  static sortResults(info: any) {
+    return info.sort((a: any, b: any) => b.totalPoints - a.totalPoints
+        || b.totalVictories - a.totalVictories
+        || b.goalsBalance - a.goalsBalance
+        || b.goalsFavor - a.goalsFavor
+        || a.goalsOwn - b.goalsOwn);
+  }
+
   static async getLeaderBoard(): Promise<IReturnService> {
     const teams = await Teams.findAll();
     const teamStatus = await MatchesS.getAllPoints(teams);
-    const data = await Promise.all(teamStatus.map((team) => ({
+    const map = await Promise.all(teamStatus.map((team) => ({
       name: team.teamName,
       totalPoints: team.totalDraws + (team.totalWins * 3),
       totalGames: team.totalGames,
@@ -134,9 +140,11 @@ export default class MatchesS {
       totalLosses: team.totalLosses,
       goalsFavor: team.goalsMade,
       goalsOwn: team.goalsTaken,
-      // goalsBalance: team.totalGoals,
-      // efficiency: (team.totalDraws + (team.totalWins * 3) / (team.totalGames * 3)) * 100,
+      goalsBalance: team.totalGoals,
+      efficiency: (((team.totalDraws + (team.totalWins * 3)) / (team.totalGames * 3)) * 100)
+        .toFixed(2),
     })));
+    const data = this.sortResults(map);
     return { status: 200, data };
   }
 }

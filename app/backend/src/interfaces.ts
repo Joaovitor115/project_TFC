@@ -50,7 +50,7 @@ export interface ILeaderBoard {
   goalsFavor: number
   goalsOwn: number
   goalsBalance: number
-  efficiency: number
+  efficiency: string
 }
 
 export interface IGetPoints {
@@ -62,6 +62,7 @@ export interface IGetPoints {
   totalGoals: number
   totalLosses: number
   teamName: string
+
 }
 
 export type IEmail = Pick<IUser, 'email'>;
