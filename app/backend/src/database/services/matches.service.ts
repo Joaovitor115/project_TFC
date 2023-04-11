@@ -64,7 +64,7 @@ export default class MatchesS {
     return { status: 201, data };
   }
 
-  static async getMatchResults(homeTeam: IMatch[], awayTeam: IMatch[]) {
+  static async getMatchResults(homeTeam: IMatch[]) {
     let totalDraws = 0;
     let totalWins = 0;
     let totalLosses = 0;
@@ -73,11 +73,6 @@ export default class MatchesS {
       if (element.homeTeamGoals > element.awayTeamGoals) { totalWins += 1; }
       if (element.homeTeamGoals < element.awayTeamGoals) { totalLosses += 1; }
     });
-    awayTeam.forEach((element: IMatch) => {
-      if (element.homeTeamGoals === element.awayTeamGoals) { totalDraws += 1; }
-      if (element.homeTeamGoals > element.awayTeamGoals) { totalLosses += 1; }
-      if (element.homeTeamGoals < element.awayTeamGoals) { totalWins += 1; }
-    });
     return { totalDraws, totalWins, totalLosses };
   }
 
@@ -85,14 +80,9 @@ export default class MatchesS {
     let goalsTaken = 0;
     let goalsMade = 0;
     const homeTeams = await Matches.findAll({ where: { homeTeamId: id, inProgress: false } });
-    const awayTeams = await Matches.findAll({ where: { awayTeamId: id, inProgress: false } });
     homeTeams.forEach((element) => {
       goalsMade += JSON.parse(element.homeTeamGoals);
       goalsTaken += JSON.parse(element.awayTeamGoals);
-    });
-    awayTeams.forEach((element) => {
-      goalsMade += JSON.parse(element.awayTeamGoals);
-      goalsTaken += JSON.parse(element.homeTeamGoals);
     });
     return { goalsMade, goalsTaken };
   }
@@ -101,8 +91,7 @@ export default class MatchesS {
     const { goalsMade, goalsTaken } = await MatchesS.getGoals(id);
     const { teamName } = await Teams.findByPk(id) as Teams;
     const homeTeam = await Matches.findAll({ where: { homeTeamId: id, inProgress: false } });
-    const awayTeam = await Matches.findAll({ where: { awayTeamId: id, inProgress: false } });
-    const teamResulsInfo = await MatchesS.getMatchResults(homeTeam, awayTeam);
+    const teamResulsInfo = await MatchesS.getMatchResults(homeTeam);
     const { totalDraws, totalLosses, totalWins } = teamResulsInfo;
     const totalGoals = goalsMade - goalsTaken;
     const totalGames = totalDraws + totalWins + totalLosses;
