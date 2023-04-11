@@ -33,7 +33,6 @@ router.post(
 );
 router.get(
   '/leaderboard/home',
-  validateToken,
   (req, res) => MatchesController.getLeaderBoard(req, res),
 );
 

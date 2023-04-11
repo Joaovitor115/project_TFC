@@ -134,9 +134,9 @@ export default class MatchesS {
       totalLosses: team.totalLosses,
       goalsFavor: team.goalsMade,
       goalsOwn: team.goalsTaken,
-      goalsBalance: team.totalGoals,
-      efficiency: (team.totalDraws + (team.totalWins * 3) / (team.totalGames * 3)) * 100,
+      // goalsBalance: team.totalGoals,
+      // efficiency: (team.totalDraws + (team.totalWins * 3) / (team.totalGames * 3)) * 100,
     })));
-    return { status: 201, data };
+    return { status: 200, data };
   }
 }
